@@ -1,0 +1,320 @@
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage{microtype}
+\usepackage{csquotes}
+\usepackage{standalone}
+\usepackage[mathrm=sym]{unicode-math}
+\usepackage[binary-units]{siunitx}
+\usepackage{datetime2}
+\usepackage{booktabs}
+\usepackage{libertinus}
+\usepackage{multirow}
+\usepackage{amsmath}
+\usepackage{setspace}
+\usepackage{footnote}
+\usepackage[inline]{enumitem}
+\usepackage{caption}
+\usepackage{stackengine}
+\usepackage{tabularx}
+\usepackage{dsfont}
+\usepackage{tcolorbox}
+\usepackage{bm}
+\usepackage{tikz}
+\usepackage{subcaption}
+\usepackage{polyglossia}
+\usepackage{fontspec}
+\setmainlanguage{english}
+\usepackage[flushleft]{threeparttable}
+\renewcommand{\tabularxcolumn}[1]{m{#1}}
+\emergencystretch=1cm
+\newcommand{\baselinestretchsize}{1.1}
+\renewcommand{\baselinestretch}{\baselinestretchsize}
+
+\usepackage[ruled,linesnumbered]{algorithm2e}
+\renewcommand{\floatpagefraction}{0.80}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+
+\setcounter{totalnumber}{5}
+\setcounter{topnumber}{5}
+\setcounter{bottomnumber}{5}
+
+\usepackage{geometry}
+\ifthenelse{\boolean{bPrintVersion}}
+{
+	\geometry{right=2.6cm, textwidth=15cm, top=4.1cm, textheight=21.5cm}
+}{
+	\geometry{right=3cm, textwidth=15cm, top=4.1cm, textheight=21.5cm}
+}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot{}
+
+\renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
+\fancyhead[LE,RO]{\thepage}
+\fancyhead[RE]{\leftmark}
+\fancyhead[LO]{\rightmark}
+\renewcommand{\headrulewidth}{0.3pt}
+\setlength{\headheight}{13.6pt}
+
+%Options: Sonny, Lenny, Glenn, Conny, Rejne, Bjarne, Bjornstrup
+\usepackage[Bjornstrup]{fncychap}
+% for bjornstrup, to remove overfull hbox warnings
+\renewcommand{\DOCH}{%
+	\settowidth{\py}{\CNoV\thechapter}
+	\addtolength{\py}{-10pt}      % Amount of space by which the number is shifted right
+	\fboxsep=0pt%
+	\colorbox[gray]{.85}{\rule{0pt}{40pt}\parbox[b]{\textwidth}{\hfill}}%
+	\kern-\py\raise20pt%
+	\rlap{\color[gray]{.5}\CNoV\thechapter}\\%
+}
+\setlength{\marginparwidth}{2cm}
+\usepackage{todonotes}
+\newcommand{\insertfigure}[2][]{
+	\begin{figure}
+		\missingfigure[#1]{#2}
+		\caption{#2}
+	\end{figure}
+}
+\newcommand{\insertref}[1]{\todo[fancyline,color=green!40]{Add reference: #1}}
+\newcommand{\explainindetail}[1]{\todo[fancyline,color=red!40]{#1}}
+\newcommand{\inlinetodo}[1]{\todo[inline]{#1}}
+\newcommand{\generictodo}[1]{\todo[fancyline,color=green!40]{#1}}
+
+\ifthenelse{\boolean{bDraft}}
+{
+	\voffset = 0cm
+	\newcommand{\drafttext}{\emph{Draft Copy: \today\\}}
+	\fancyfoot[C]{\drafttext}
+	\fancypagestyle{plain}{%
+		\fancyhf{}%
+		\fancyfoot[C]{\drafttext}%
+		\renewcommand{\headrulewidth}{0pt}%
+		\renewcommand{\footrulewidth}{0pt}%
+	}
+}{}
+
+\ifthenelse{\boolean{bPrintVersion}}
+{
+	\usepackage[
+		unicode=true,
+		colorlinks  = true,
+		citecolor   = black,
+		linkcolor   = black,
+		urlcolor    = black,
+		breaklinks  = true,
+		pdfauthor   = {Martin\ Zach},
+		pdftitle    = {Generative\ Regularizers\ in\ Computed\ Tomography\ (print-version)},
+		pdfsubject  = {Development\ and\ Application\ of\ a\ Generative\ Regularizer\ to\ be\ used\ in\ Computed\ Tomography.},
+		pdfkeywords = {Computer\ Vision;\ Computed\ Tomography;\ Maximum-Likelihood;\ Generative\ Models;\ Variational\ Methods},
+		pdfcreator  = {LaTeX\ on\ Arch\ Linux\ and\ neovim\ with\ VimTeX},
+		pdfproducer = {xelatex}
+	]{hyperref}
+}{
+	\usepackage[
+		unicode=true,
+		colorlinks  = true,
+		citecolor   = blue,
+		linkcolor   = blue,
+		urlcolor    = black,
+		breaklinks  = true,
+		pdfauthor   = {Martin\ Zach},
+		pdftitle    = {Generative\ Regularizers\ in\ Computed\ Tomography\ (web-version)},
+		pdfsubject  = {Development\ and\ Application\ of\ a\ Generative\ Regularizer\ to\ be\ used\ in\ Computed\ Tomography.},
+		pdfkeywords = {Computer\ Vision;\ Computed\ Tomography;\ Maximum-Likelihood;\ Generative\ Models;\ Variational\ Methods},
+		pdfcreator  = {LaTeX\ on\ Arch\ Linux\ and\ neovim\ with\ VimTeX},
+		pdfproducer = {xelatex}
+	]{hyperref}
+}
+
+\usepackage[
+	hyperref=true,
+	backref=true,
+	backrefstyle=three,
+	url=false,
+	eprint=false,
+	giveninits=true,
+]{biblatex}
+\addbibresource{bibliography.bib}
+\DefineBibliographyStrings{english}{%
+	backrefpage = {cited on page},%
+	backrefpages = {cited on pages},%
+}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
+
+% Clear Header Style on the Last Empty Odd pages
+\makeatletter
+\def\cleardoublepage{\clearpage\if@twoside \ifodd\c@page\else%
+\hbox{}%
+\thispagestyle{empty}%
+\newpage%
+\if@twocolumn\hbox{}\newpage\fi\fi\fi}
+\makeatother
+
+\usepackage[nohints]{minitoc}
+\setcounter{minitocdepth}{1}
+\mtcsetfeature{minitoc}{after}{\vspace*{0.5cm}}
+\usepackage{placeins}
+
+\usepackage{epigraph}
+\renewcommand{\textflush}{flushepinormal}
+\setlength{\epigraphwidth}{8cm}
+\newcommand{\myepigraph}[3]{\epigraph{#1}{#2, \textit{#3}}}
+\newcommand{\transexpl}[3]{#1 (#2, #3)}
+\usepackage[capitalize]{cleveref}
+
+\usetikzlibrary{angles,quotes,positioning}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\definecolor{light}{HTML}{bdbdbd}
+\definecolor{dark}{HTML}{191919}
+
+\pgfplotsset{compat=1.17}
+\usepgfplotslibrary{
+  groupplots
+}
+\usetikzlibrary{matrix}
+\usetikzlibrary{shapes.arrows}
+\input{./figures/image-formation/geometries.style}
+\input{./figures/principles/interaction_style}
+\input{./figures/principles/geometries.style.tex}
+
+\usetikzlibrary{calc, positioning, shapes, backgrounds, fit, arrows, spy}
+\usepackage{pgf-spectra}
+\usepackage{siunitx}
+\usepackage{tikz-3dplot}
+\definecolor{tomplane}{rgb}{1,0,0}
+\definecolor{projplane}{rgb}{0,0,1}
+\definecolor{coordsys}{rgb}{0.5,0.5,0}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+
+\makeatletter
+
+% Initialize H matrix for perspective view
+\pgfmathsetmacro\H@tpp@aa{1}\pgfmathsetmacro\H@tpp@ab{0}\pgfmathsetmacro\H@tpp@ac{0}%\pgfmathsetmacro\H@tpp@ad{0}
+\pgfmathsetmacro\H@tpp@ba{0}\pgfmathsetmacro\H@tpp@bb{1}\pgfmathsetmacro\H@tpp@bc{0}%\pgfmathsetmacro\H@tpp@bd{0}
+\pgfmathsetmacro\H@tpp@ca{0}\pgfmathsetmacro\H@tpp@cb{0}\pgfmathsetmacro\H@tpp@cc{1}%\pgfmathsetmacro\H@tpp@cd{0}
+\pgfmathsetmacro\H@tpp@da{0}\pgfmathsetmacro\H@tpp@db{0}\pgfmathsetmacro\H@tpp@dc{0}%\pgfmathsetmacro\H@tpp@dd{1}
+
+%Initialize H matrix for main rotation
+\pgfmathsetmacro\H@rot@aa{1}\pgfmathsetmacro\H@rot@ab{0}\pgfmathsetmacro\H@rot@ac{0}%\pgfmathsetmacro\H@rot@ad{0}
+\pgfmathsetmacro\H@rot@ba{0}\pgfmathsetmacro\H@rot@bb{1}\pgfmathsetmacro\H@rot@bc{0}%\pgfmathsetmacro\H@rot@bd{0}
+\pgfmathsetmacro\H@rot@ca{0}\pgfmathsetmacro\H@rot@cb{0}\pgfmathsetmacro\H@rot@cc{1}%\pgfmathsetmacro\H@rot@cd{0}
+%\pgfmathsetmacro\H@rot@da{0}\pgfmathsetmacro\H@rot@db{0}\pgfmathsetmacro\H@rot@dc{0}\pgfmathsetmacro\H@rot@dd{1}
+
+\pgfkeys{
+    /three point perspective/.cd,
+        p/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#1))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ba{#2/#1}
+                \pgfmathsetmacro\H@tpp@ca{#3/#1}
+                \pgfmathsetmacro\H@tpp@da{ 1/#1}
+                \coordinate (vp-p) at (#1,#2,#3);
+            \fi
+        },
+        q/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#2))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ab{#1/#2}
+                \pgfmathsetmacro\H@tpp@cb{#3/#2}
+                \pgfmathsetmacro\H@tpp@db{ 1/#2}
+                \coordinate (vp-q) at (#1,#2,#3);
+            \fi
+        },
+        r/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#3))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ac{#1/#3}
+                \pgfmathsetmacro\H@tpp@bc{#2/#3}
+                \pgfmathsetmacro\H@tpp@dc{ 1/#3}
+                \coordinate (vp-r) at (#1,#2,#3);
+            \fi
+        },
+        coordinate/.code args={#1,#2,#3}{
+            \def\tpp@x{#1}
+            \def\tpp@y{#2}
+            \def\tpp@z{#3}
+        },
+}
+
+\tikzset{
+    view/.code 2 args={
+        \pgfmathsetmacro\rot@main@theta{#1}
+        \pgfmathsetmacro\rot@main@phi{#2}
+        % Row 1
+        \pgfmathsetmacro\H@rot@aa{cos(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@ab{sin(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@ac{0}
+        % Row 2
+        \pgfmathsetmacro\H@rot@ba{-cos(\rot@main@theta)*sin(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@bb{cos(\rot@main@phi)*cos(\rot@main@theta)}
+        \pgfmathsetmacro\H@rot@bc{sin(\rot@main@theta)}
+        % Row 3
+        \pgfmathsetmacro\H@m@ca{sin(\rot@main@phi)*sin(\rot@main@theta)}
+        \pgfmathsetmacro\H@m@cb{-cos(\rot@main@phi)*sin(\rot@main@theta)}
+        \pgfmathsetmacro\H@m@cc{cos(\rot@main@theta)}
+        % Set vector values
+        \pgfmathsetmacro\vec@x@x{\H@rot@aa}
+        \pgfmathsetmacro\vec@y@x{\H@rot@ab}
+        \pgfmathsetmacro\vec@z@x{\H@rot@ac}
+        \pgfmathsetmacro\vec@x@y{\H@rot@ba}
+        \pgfmathsetmacro\vec@y@y{\H@rot@bb}
+        \pgfmathsetmacro\vec@z@y{\H@rot@bc}
+        % Set pgf vectors
+        \pgfsetxvec{\pgfpoint{\vec@x@x cm}{\vec@x@y cm}}
+        \pgfsetyvec{\pgfpoint{\vec@y@x cm}{\vec@y@y cm}}
+        \pgfsetzvec{\pgfpoint{\vec@z@x cm}{\vec@z@y cm}}
+    },
+}
+
+\tikzset{
+    perspective/.code={\pgfkeys{/three point perspective/.cd,#1}},
+    perspective/.default={p={(15,0,0)},q={(0,15,0)},r={(0,0,50)}},
+}
+
+\tikzdeclarecoordinatesystem{three point perspective}{
+    \pgfkeys{/three point perspective/.cd,coordinate={#1}}
+    \pgfmathsetmacro\temp@p@w{\H@tpp@da*\tpp@x + \H@tpp@db*\tpp@y + \H@tpp@dc*\tpp@z + 1}
+    \pgfmathsetmacro\temp@p@x{(\H@tpp@aa*\tpp@x + \H@tpp@ab*\tpp@y + \H@tpp@ac*\tpp@z)/\temp@p@w}
+    \pgfmathsetmacro\temp@p@y{(\H@tpp@ba*\tpp@x + \H@tpp@bb*\tpp@y + \H@tpp@bc*\tpp@z)/\temp@p@w}
+    \pgfmathsetmacro\temp@p@z{(\H@tpp@ca*\tpp@x + \H@tpp@cb*\tpp@y + \H@tpp@cc*\tpp@z)/\temp@p@w}
+    \pgfpointxyz{\temp@p@x}{\temp@p@y}{\temp@p@z}
+}
+\tikzaliascoordinatesystem{tpp}{three point perspective}
+
+\makeatother
+\colorlet{myblue}{black!40!blue}
+\colorlet{myred}{black!40!red}
+
+\definecolor{coilcolor}{rgb}{0.8,0.5,0.5}
+\definecolor{photoncolor}{rgb}{0.65, 0.16, 0.16}
+\definecolor{secondary}{RGB}{181, 137, 0}
+\usetikzlibrary{decorations.pathmorphing,calc}
+
+
+\newcommand{\AxisRotator}[1][rotate=0]{%
+    \tikz [x=0.25cm,y=0.60cm,line width=.1ex,-stealth,#1] \draw (0,0) arc (-150:150:1 and 1);%
+}
+\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,calc}
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+\pgfmathdeclarefunction{gauss}{3}{%
+  \pgfmathparse{1/(#3*sqrt(2*pi))*exp(-((#1-#2)^2)/(2*#3^2))}%
+}
+\usepgfplotslibrary{fillbetween}
+\definecolor{normalanno}{HTML}{446699}
+\definecolor{threebythree}{HTML}{543639}
+\newcommand{\networkblock}[3]{%
+	\pgfmathsetmacro{\cubex}{#1}
+	\pgfmathsetmacro{\cubey}{#2}
+	\pgfmathsetmacro{\cubez}{#3}
+	\draw[line join=bevel, ultra thick,draw=photoncolor,fill=light] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,-\cubey,0) -- ++(\cubex,0,0) -- cycle;
+	\draw[line join=bevel, ultra thick,draw=photoncolor,fill=light] (0,0,0) -- ++(0,0,-\cubez) -- ++(0,-\cubey,0) -- ++(0,0,\cubez) -- cycle;
+	\draw[line join=bevel, ultra thick,draw=photoncolor,fill=light] (0,0,0) -- ++(-\cubex,0,0) -- ++(0,0,-\cubez) -- ++(\cubex,0,0) -- cycle;
+}

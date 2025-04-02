@@ -1,0 +1,14 @@
+\documentclass[tikz,border=3mm]{standalone}
+\usepackage{pgfplots}
+\pgfplotsset{compat=newest}
+\begin{document}
+\begin{tikzpicture}
+	\begin{axis}[xmin=-2, xmax=4.5, ymin=-2, ymax=4.5]
+		\addplot table [col sep=comma] {./figures/image-formation/kaczmarz.txt};
+		\draw (4, 4.5) -- (-1, -3) node [pos=0.4, below, sloped] {\( -1.5f_1 + f_2 = -1.5 \)};
+		\draw (5, 4.5) -- (-2, 1) node [pos=0.6, above, sloped] {\( -0.5f_1 + f_2 = 2 \)} ;
+		\node at (0, 0) [below] {\( f^0 = {(0, 0)}^\top \)};
+		\node at (3.5, 3.75) [below right] {\( f^* \)};
+	\end{axis}
+\end{tikzpicture}
+\end{document}

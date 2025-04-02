@@ -1,0 +1,53 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,calc}
+\input{geometries.style}
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+\definecolor{photoncolor}{rgb}{0.65, 0.16, 0.16}
+\begin{document}
+\begin{tikzpicture}
+	\pic at (0,-1) {human};
+	\foreach \xoff/\opa in {-2.3/1, 2.3/0.3}
+	{
+		\pic[transform shape, opacity=\opa, local bounding box=source, rotate=-90,scale=0.2] at (\xoff, 4) {source};
+		\foreach \minoroff in {-.3,-0.1,...,.3}
+		{
+			\pic[transform shape, opacity=\opa, local bounding box=detector, rotate=-90,scale=0.1] at (\xoff+\minoroff, -4) {detector};
+			\draw [
+				-latex, decorate, decoration={snake, amplitude=0.05cm, segment length=5pt, post length=1mm},%
+				color=photoncolor, opacity=\opa
+			] (source.south) -- (detector.north);%
+		}
+	}
+	\draw [-latex, thick, dashed] (-2, 4) -- ++(4, 0);
+	\draw [-latex, thick, dashed] (-1.8, -4) -- ++(3.6, 0);
+	\centerarc[-latex, thick, dashed](0,0)(125:158:4.7);
+	\rotatebox{45}{
+	\foreach \xoff in {-2.3, 2.3}
+	{
+		\pic[rotate=-90,opacity=0.3, local bounding box=source, scale=0.2] at (\xoff, 4) {source};
+		\foreach \minoroff in {-.3,-0.1,...,.3}
+		{
+			\pic[transform shape, opacity=0.3, local bounding box=detector, rotate=-90,scale=0.1] at (\xoff+\minoroff, -4) {detector};
+			\draw [
+				-latex, decorate, decoration={snake, amplitude=0.05cm, segment length=5pt, post length=1mm},%
+				color=photoncolor, opacity=0.3
+			] (source.south) -- (detector.north);%
+		}
+		\draw [opacity=0.1,-latex, thick, dashed] (-2, 4) -- ++(4, 0);
+		\draw [opacity=0.1,-latex, thick, dashed] (-2, -4) -- ++(4, 0);
+	}}
+	\begin{scope}[rotate=45,opacity=0]
+	\foreach \xoff in {-2.3, 2.3}
+	{
+		\pic[rotate=-90,opacity=0, local bounding box=source, scale=0.2] at (\xoff, 4) {source};
+		\pic[rotate=-90,transform shape, opacity=0, local bounding box=detector, scale=0.1] at (\xoff, -4) {detector};
+		\draw [
+			-latex, decorate, decoration={snake, amplitude=0.05cm, segment length=5pt, post length=1mm},%
+			color=photoncolor, opacity=0
+		] (source.south) -- (detector.north);%
+	}
+	\end{scope}
+	
+\end{tikzpicture}
+\end{document}

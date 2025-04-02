@@ -1,0 +1,50 @@
+\documentclass[tikz]{standalone}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+\usepackage{xcolor}
+\definecolor{light}{HTML}{bdbdbd}
+\definecolor{dark}{HTML}{191919}
+
+\pgfplotsset{compat=1.17}
+\begin{document}
+\begin{tikzpicture}
+	\node (im) at (0,0) {\includegraphics[width=6cm]{./figures/image-formation/tu.png}};
+	\begin{scope}[shift={(-70:3cm)}]
+		\begin{axis}[
+			axis lines=middle, axis line style={-latex},
+			anchor={(190,0)}, rotate around={20:(current axis.origin)},
+			width=8.1cm, height=3.0cm,
+			xlabel={\(r\)}, x label style={rotate=20,below=1mm},
+			ylabel={\(F(r, \SI{20}{\degree})\)}, y label style={rotate=20,above=0mm},
+			enlarge x limits=0.05,
+			enlarge y limits=0.2,
+			xtick=\empty,
+			ytick=\empty,
+		]
+		\addplot[color=black,smooth] table[col sep=comma, header=false, x index=0, y index=1] {./figures/image-formation/radon.csv};
+		\end{axis}
+	\end{scope}
+	\begin{scope}[shift={(40:1.7cm)}]
+		\begin{axis}[
+			axis lines=middle, axis line style={-latex},
+			anchor={(100,0)}, rotate around={-50:(current axis.origin)},
+			width=8.15cm, height=3cm,
+			xlabel={\(r\)}, x label style={rotate=-50,below=1mm},
+			ylabel={\(F(r, \SI{130}{\degree})\)}, y label style={rotate=-50,above=0mm},
+			enlarge x limits=0.05,
+			xtick=\empty,
+			ytick=\empty,
+		]
+		\addplot[color=black,smooth] table[col sep=comma, header=false, x index=0, y index=2] {./figures/image-formation/radon.csv};
+		\end{axis}
+	\end{scope}
+	\fill[light] (6.3, 0.3) rectangle ++(-0.6, 0.6) node [black, midway] {\num{189}};
+	\fill[dark] (7, 0.3) rectangle ++(-0.6, 0.6) node [light, midway] {\num{25}};
+	\draw[gray, dashed] (-2.35, 0.45) -- ++(40:5.9cm);
+	\draw[gray, dashed] (2.35, -0.85) -- ++(40:4cm);
+	\draw[gray, dashed] (-2.35, -0.45) -- ++(-70:4.7cm);
+	\draw[gray, dashed] (2.35, -0.57) -- ++(-70:3cm);
+	\draw[-latex] (0, 0) -- ++(4, 0) node [right] {\( x_1 \)};
+	\draw[-latex] (0, 0) -- ++(0, 2) node [above] {\( x_2 \)};
+\end{tikzpicture}
+\end{document}

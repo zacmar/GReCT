@@ -1,0 +1,39 @@
+\documentclass[../ml-tct.tex]{subfiles}
+\begin{document}
+\chapter{Conclusion and Outlook}%
+\label{chap:conclusion}
+\epigraph{A theory that explains everything, explains nothing.}{Karl Popper}
+
+\minitoc%
+\section{Conclusion}
+In this work, we introduced a novel fully generative approach to learn a regularizer for \gls{ct} reconstruction.
+Our energy-based formulation allows us to apply this regularizer to a multitude of reconstruction task, such as limited-angle or few-view \gls{ct}, as well as image-space restoration tasks such as denoising.
+The learned regularizer is able to outperform traditional reconstruction algorithms in all tasks, sometimes by a large margin.
+The advantages of the global receptive field of our regularizer along with the generative training are especially apparent in limited-angle and few-view reconstruction tasks.
+There, the regularizer is able to find solutions that are consistent with the measured data and exhibit the global structure of the fully-sampled references.
+
+Further, we can cast the energy-based model into a statistical framework, which allows us to leverage the rich theory of statistical models.
+Specifically, we can visualize our prior by means of computing the modes of its Gibbs-Boltzmann distribution, or by drawing samples from it.
+This gives valuable insight into what the regularizer has learned, which is critical in the medical domain where interpretability is exceptionally important.
+On the same note, for any reconstruction task, we may not only compute one point estimate by means of the \gls{map} solution, but we can draw samples from the posterior.
+This allows us to also compute the expectation as well as the variance of the posterior, which can be interpreted as a rudimentary uncertainty quantification.
+\section{Outlook}
+The probabilistic interpretation opens an avenue for domain experts to gain insight into what the regularizer prefers, and if this is helpful at all in the reconstruction task.
+However, there are some limitations to this approach:
+Due to the computational burden of model sampling during training, such approaches have traditionally not been used.
+With recent advances in computational power and efficiency, it is now possible to train models on resolutions close to clinical practice.
+
+The \gls{ml} training however is not only computationally expensive, but also suffers from instability during training.
+An interesting question is if the training can be stabilized by injecting \enquote{discriminative} knowledge.
+For instance, one may be tempted to train a regularizer that is a capable generative model, while it is simultaneously able to classify the \( z \)-axis position of the slice.
+Similarly, it may be interesting to train a network with \gls{ml} as well as a discriminative loss, that is obtained by a segmentation task.
+This simultaneous hybrid training of one model has recently been shown to boost discriminative performance, and it may be a way to stabilize the \gls{ml} training.
+Stable training would allow us to train larger, more expressive networks, that could be applied to larger resolutions.
+
+Although our regularizer is a very strong global prior for \gls{ct} images of a certain size, the experiments on other scales and out-of-distribution data showed that the performance quickly degrades for images with other high-level characteristics.
+Therefor, a possible avenue of future work is to train a regularizer in a scale-invariant manner, for instance by treating the scale as a latent variable.
+Further, our model only contains convolutional layers, which may not be optimal for such tasks.
+In light of the global receptive field of our model, it may be interesting to include attention layers, that are inherently global.
+We believe that by combining hybrid training with recent advances in the neural network community, such as attention layers, it is possible to train highly expressive models.
+In general, we feel that learning fully generative models to be used for regularization is a very interesting topic for future research.
+\end{document}

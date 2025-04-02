@@ -1,0 +1,213 @@
+\documentclass[tikz,border=3.14mm]{standalone}
+\usepackage{tikz-3dplot}
+\usepackage{xcolor}
+\definecolor{tomplane}{rgb}{1,0,0}
+\definecolor{projplane}{rgb}{0,0,1}
+\usetikzlibrary{shadows}
+\usetikzlibrary{calc}
+
+\makeatletter
+
+% Initialize H matrix for perspective view
+\pgfmathsetmacro\H@tpp@aa{1}\pgfmathsetmacro\H@tpp@ab{0}\pgfmathsetmacro\H@tpp@ac{0}%\pgfmathsetmacro\H@tpp@ad{0}
+\pgfmathsetmacro\H@tpp@ba{0}\pgfmathsetmacro\H@tpp@bb{1}\pgfmathsetmacro\H@tpp@bc{0}%\pgfmathsetmacro\H@tpp@bd{0}
+\pgfmathsetmacro\H@tpp@ca{0}\pgfmathsetmacro\H@tpp@cb{0}\pgfmathsetmacro\H@tpp@cc{1}%\pgfmathsetmacro\H@tpp@cd{0}
+\pgfmathsetmacro\H@tpp@da{0}\pgfmathsetmacro\H@tpp@db{0}\pgfmathsetmacro\H@tpp@dc{0}%\pgfmathsetmacro\H@tpp@dd{1}
+
+%Initialize H matrix for main rotation
+\pgfmathsetmacro\H@rot@aa{1}\pgfmathsetmacro\H@rot@ab{0}\pgfmathsetmacro\H@rot@ac{0}%\pgfmathsetmacro\H@rot@ad{0}
+\pgfmathsetmacro\H@rot@ba{0}\pgfmathsetmacro\H@rot@bb{1}\pgfmathsetmacro\H@rot@bc{0}%\pgfmathsetmacro\H@rot@bd{0}
+\pgfmathsetmacro\H@rot@ca{0}\pgfmathsetmacro\H@rot@cb{0}\pgfmathsetmacro\H@rot@cc{1}%\pgfmathsetmacro\H@rot@cd{0}
+%\pgfmathsetmacro\H@rot@da{0}\pgfmathsetmacro\H@rot@db{0}\pgfmathsetmacro\H@rot@dc{0}\pgfmathsetmacro\H@rot@dd{1}
+
+\pgfkeys{
+    /three point perspective/.cd,
+        p/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#1))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ba{#2/#1}
+                \pgfmathsetmacro\H@tpp@ca{#3/#1}
+                \pgfmathsetmacro\H@tpp@da{ 1/#1}
+                \coordinate (vp-p) at (#1,#2,#3);
+            \fi
+        },
+        q/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#2))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ab{#1/#2}
+                \pgfmathsetmacro\H@tpp@cb{#3/#2}
+                \pgfmathsetmacro\H@tpp@db{ 1/#2}
+                \coordinate (vp-q) at (#1,#2,#3);
+            \fi
+        },
+        r/.code args={(#1,#2,#3)}{
+            \pgfmathparse{int(round(#3))}
+            \ifnum\pgfmathresult=0\else
+                \pgfmathsetmacro\H@tpp@ac{#1/#3}
+                \pgfmathsetmacro\H@tpp@bc{#2/#3}
+                \pgfmathsetmacro\H@tpp@dc{ 1/#3}
+                \coordinate (vp-r) at (#1,#2,#3);
+            \fi
+        },
+        coordinate/.code args={#1,#2,#3}{
+            \def\tpp@x{#1}
+            \def\tpp@y{#2}
+            \def\tpp@z{#3}
+        },
+}
+
+\tikzset{
+    view/.code 2 args={
+        \pgfmathsetmacro\rot@main@theta{#1}
+        \pgfmathsetmacro\rot@main@phi{#2}
+        % Row 1
+        \pgfmathsetmacro\H@rot@aa{cos(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@ab{sin(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@ac{0}
+        % Row 2
+        \pgfmathsetmacro\H@rot@ba{-cos(\rot@main@theta)*sin(\rot@main@phi)}
+        \pgfmathsetmacro\H@rot@bb{cos(\rot@main@phi)*cos(\rot@main@theta)}
+        \pgfmathsetmacro\H@rot@bc{sin(\rot@main@theta)}
+        % Row 3
+        \pgfmathsetmacro\H@m@ca{sin(\rot@main@phi)*sin(\rot@main@theta)}
+        \pgfmathsetmacro\H@m@cb{-cos(\rot@main@phi)*sin(\rot@main@theta)}
+        \pgfmathsetmacro\H@m@cc{cos(\rot@main@theta)}
+        % Set vector values
+        \pgfmathsetmacro\vec@x@x{\H@rot@aa}
+        \pgfmathsetmacro\vec@y@x{\H@rot@ab}
+        \pgfmathsetmacro\vec@z@x{\H@rot@ac}
+        \pgfmathsetmacro\vec@x@y{\H@rot@ba}
+        \pgfmathsetmacro\vec@y@y{\H@rot@bb}
+        \pgfmathsetmacro\vec@z@y{\H@rot@bc}
+        % Set pgf vectors
+        \pgfsetxvec{\pgfpoint{\vec@x@x cm}{\vec@x@y cm}}
+        \pgfsetyvec{\pgfpoint{\vec@y@x cm}{\vec@y@y cm}}
+        \pgfsetzvec{\pgfpoint{\vec@z@x cm}{\vec@z@y cm}}
+    },
+}
+
+\tikzset{
+    perspective/.code={\pgfkeys{/three point perspective/.cd,#1}},
+    perspective/.default={p={(15,0,0)},q={(0,15,0)},r={(0,0,50)}},
+}
+
+\tikzdeclarecoordinatesystem{three point perspective}{
+    \pgfkeys{/three point perspective/.cd,coordinate={#1}}
+    \pgfmathsetmacro\temp@p@w{\H@tpp@da*\tpp@x + \H@tpp@db*\tpp@y + \H@tpp@dc*\tpp@z + 1}
+    \pgfmathsetmacro\temp@p@x{(\H@tpp@aa*\tpp@x + \H@tpp@ab*\tpp@y + \H@tpp@ac*\tpp@z)/\temp@p@w}
+    \pgfmathsetmacro\temp@p@y{(\H@tpp@ba*\tpp@x + \H@tpp@bb*\tpp@y + \H@tpp@bc*\tpp@z)/\temp@p@w}
+    \pgfmathsetmacro\temp@p@z{(\H@tpp@ca*\tpp@x + \H@tpp@cb*\tpp@y + \H@tpp@cc*\tpp@z)/\temp@p@w}
+    \pgfpointxyz{\temp@p@x}{\temp@p@y}{\temp@p@z}
+}
+\tikzaliascoordinatesystem{tpp}{three point perspective}
+
+\makeatother
+
+\begin{document}
+\begin{tikzpicture}[line join=round,scale=4]
+	\begin{scope}[
+		view={80}{15},
+		perspective={
+		    p={(0,0,0)},q={(0,0,0)},r={(0,0,0)}
+		},
+		bullet/.style={circle,fill,inner sep=1pt},
+		font=\sffamily
+	]
+		\coordinate (cyellow) at (tpp cs:0.3, 0.7, 0.5);
+		\coordinate (cred) at (tpp cs:0.7, 0.7, 0.5);
+		\coordinate (cblue) at (tpp cs:0.3, 1.3, 0.5);
+		\coordinate (cgreen) at (tpp cs:0.7, 1.3, 0.5);
+		\coordinate (O) at (-0.3,-0.3,-0.3);
+		\draw[thick,->] (O) -- ++(0.3,0,0) node[anchor=north east] {$x_1$};
+		\draw[thick,->] (O) -- ++(0,0.3,0) node[anchor=south west] {$x_2$};
+		\draw[thick,->] (O) -- ++(0,0,0.3) node[anchor=south] {$x_3$};
+		\foreach \X in {0,1} {
+			\foreach \Y in {0,2} {
+				\foreach \Z [evaluate=\Z as \L using {int(1+\X+3*\Y/2+6*\Z)}] in {0,1} {
+					\path (tpp cs:\X,\Y,\Z) node[bullet] (\L){};
+				}
+			}
+		}
+		\draw[ultra thick] (4) -- (10);
+		\shade [ball color=blue] (cblue) circle (0.15cm);
+		\shade [ball color=yellow] (cyellow) circle (0.25cm);
+		\shade [ball color=green] (cgreen) circle (0.25cm);
+		\shade [ball color=red] (cred) circle (0.15cm);
+		\draw[ultra thick] (1) -- (2) -- (5) -- (11) -- (8) -- (7) -- (1) (2)-- (8) (1) -- (4)  (10) -- (11) (4) -- (5) (7) -- (10);
+		\def\tomoff{-0.3}
+		\draw[photoncolor] ($(1) + (tpp cs:0.3, 0, 0)$) -- ($(1) + (tpp cs:0.3, 2, 0)$);
+		\draw[photoncolor] ($(1) + (tpp cs:0.7, 0, 0)$) -- ($(1) + (tpp cs:0.7, 2, 0)$);
+		\draw[photoncolor] ($(1) + (tpp cs:0.3, 0, \tomoff)$) -- ++(0, 2, 0) -- ++(0, 0, -1) -- ++(0, -2, 0) -- cycle;
+		\draw[photoncolor] ($(1) + (tpp cs:0.7, 0, \tomoff)$) -- ++(0, 2, 0) -- ++(0, 0, -1) -- ++(0, -2, 0) -- cycle;
+		\def\projoff{0.8}
+		\draw[projplane] ($(2) + (tpp cs:\projoff, 0, 0)$) -- ($(8) + (tpp cs:\projoff, 0, 0)$) -- ($(11) + (tpp cs:\projoff, 0, 0)$) -- ($(5) + (tpp cs:\projoff, 0, 0)$) -- cycle;
+		\begin{scope}[canvas is yz plane at x=1+\projoff,transform shape]
+			\fill[fill=yellow] (0.7, 0.5) circle (0.25);
+			\fill[fill=red!50!yellow] (0.7, 0.5) circle (0.15);
+			\fill[fill=green] (1.3, 0.5) circle (0.25);
+			\fill[fill=blue!50!green] (1.3, 0.5) circle (0.15);
+		\end{scope}
+		\begin{scope}[canvas is yz plane at x=0.3, shift={(0, -1.3)}, transform shape]
+			\fill[fill=yellow] (0.7, 0.5) circle (0.25);
+			\fill[fill=blue] (1.3, 0.5) circle (0.15);
+		\end{scope}
+		\begin{scope}[canvas is yz plane at x=0.7, shift={(0, -1.3)}, transform shape]
+			\fill[fill=red] (0.7, 0.5) circle (0.15);
+			\fill[fill=green] (1.3, 0.5) circle (0.25);
+		\end{scope}
+	\end{scope}
+	\begin{scope}[shift={(5,0.5)}]
+		\begin{scope}[
+			view={240}{-60},
+			perspective={
+			    p={(0,0,0)},q={(0,0,0)},r={(0,0,0)}
+			},
+			bullet/.style={circle,fill,inner sep=1pt},
+			font=\sffamily
+		]
+			\coordinate (cyellow) at (tpp cs:0.3, 0.7, 0.5);
+			\coordinate (cred) at (tpp cs:0.7, 0.7, 0.5);
+			\coordinate (cblue) at (tpp cs:0.3, 1.3, 0.5);
+			\coordinate (cgreen) at (tpp cs:0.7, 1.3, 0.5);
+			\coordinate (O) at (-0.3,-0.3,-0.3);
+			\draw[thick,->] (O) -- ++(0.3,0,0) node[anchor=north] {$x_1$};
+			\draw[thick,->] (O) -- ++(0,0.3,0) node[anchor=south] {$x_2$};
+			\draw[thick,->] (O) -- ++(0,0,0.3) node[anchor=north] {$x_3$};
+			\foreach \X in {0,1} {
+				\foreach \Y in {0,2} {
+					\foreach \Z [evaluate=\Z as \L using {int(1+\X+3*\Y/2+6*\Z)}] in {0,1} {
+						\path (tpp cs:\X,\Y,\Z) node[bullet] (\L){};
+					}
+				}
+			}
+			\draw [ultra thick] (7) -- (10);
+			\shade [ball color=blue] (cblue) circle (0.15cm);
+			\shade [ball color=yellow] (cyellow) circle (0.25cm);
+			\shade [ball color=green] (cgreen) circle (0.25cm);
+			\shade [ball color=red] (cred) circle (0.15cm);
+			\draw[ultra thick] (1) -- (2) -- (5) -- (11) -- (8) -- (7) -- (1) (2) -- (8) (1) -- (4) -- (10) --(11) (4) -- (5);
+			\def\tomoff{-0.3}
+			\draw[photoncolor] ($(1) + (tpp cs:0.3, 0, 0)$) -- ($(1) + (tpp cs:0.3, 2, 0)$);
+			\draw[photoncolor] ($(1) + (tpp cs:0.7, 0, 0)$) -- ($(1) + (tpp cs:0.7, 2, 0)$);
+			\draw[photoncolor] ($(1) + (tpp cs:0.3, 0, \tomoff)$) -- ++(0, 2, 0) -- ++(0, 0, -1) -- ++(0, -2, 0) -- cycle;
+			\draw[photoncolor] ($(1) + (tpp cs:0.7, 0, \tomoff)$) -- ++(0, 2, 0) -- ++(0, 0, -1) -- ++(0, -2, 0) -- cycle;
+			\def\projoff{0.8}
+			\draw[projplane] ($(2) + (tpp cs:\projoff, 0, 0)$) -- ($(8) + (tpp cs:\projoff, 0, 0)$) -- ($(11) + (tpp cs:\projoff, 0, 0)$) -- ($(5) + (tpp cs:\projoff, 0, 0)$) -- cycle;
+			\begin{scope}[canvas is yz plane at x=1+\projoff,transform shape]
+				\fill[fill=yellow] (0.7, 0.5) circle (0.25);
+				\fill[fill=red!50!yellow] (0.7, 0.5) circle (0.15);
+				\fill[fill=green] (1.3, 0.5) circle (0.25);
+				\fill[fill=blue!50!green] (1.3, 0.5) circle (0.15);
+			\end{scope}
+			\begin{scope}[canvas is yz plane at x=0.3, shift={(0, -1.3)}, transform shape]
+				\fill[fill=yellow] (0.7, 0.5) circle (0.25);
+				\fill[fill=blue] (1.3, 0.5) circle (0.15);
+			\end{scope}
+			\begin{scope}[canvas is yz plane at x=0.7, shift={(0, -1.3)}, transform shape]
+				\fill[fill=red] (0.7, 0.5) circle (0.15);
+				\fill[fill=green] (1.3, 0.5) circle (0.25);
+			\end{scope}
+		\end{scope}
+	\end{scope}
+\end{tikzpicture}
+\end{document}

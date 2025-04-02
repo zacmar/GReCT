@@ -1,0 +1,52 @@
+\documentclass[../ml-tct.tex]{subfiles}
+\begin{document}
+\chapter{Introduction}
+\epigraph{If you wish to make an apple pie from scratch, you must first invent the universe.}{Carl Sagan}
+In the last decade, deep learning~\cite{goodfellow_deeplearning_2016} has taken over the field of computer vision, where learning-based approaches have improved image quality in restoration tasks such as denoising~\cite{zhang_beyond_2017} or deblurring~\cite{nah_deep_2017}, and accuracy in tasks such as classification~\cite{krizhevsky_imagenet_2017} or semantic segmentation~\cite{chen_deeplab_2018}.
+In medical imaging, deep learning has traditionally been used as a tool to aid interpretation of reconstructed images, for instance through automatic segmentation~\cite{kamnitsas_efficient_2017} or classification~\cite{liu_detecting_2017}.
+However, to increase the visual quality of medical images, learning-based approaches may also be used at earlier stages such as during data acquisition or image reconstruction.
+
+\gls{ct} images have historically been reconstructed using the fast \gls{fbp}~\cite{buzug_computed_2008}.
+However, the analytical \gls{fbp} has been superseded by iterative algebraic reconstruction algorithms at around the start of the new millenium~\cite{saad_iterative_2000,wang_vannier_cheng_1999}.
+This drift has been driven largely by an increase in computational power and the need for more robust reconstruction algorithms in the light of reducing the administered ionizing radiation dose.
+In general, dose reduction is one of the major concerns in the \gls{ct} community~\cite{chen_sparsect_2019,yu_radiation_2009}.
+It has been estimated that up to \SI{50}{\percent} of ionizing radiation exposure for medical use can be attributed to \gls{ct} examinations~\cite{ncrp_ionizing_2009}.
+Thus, it is important to find reconstruction algorithms that are able to reconstruct a clinically valuable image from low-dose measurements, which may only contain a subset of the full-dose scan, or exhibit low \gls{snr}.
+
+To make the iterative algebraic reconstruction algorithms more robust, prior knowledge about the solution may be incorporated in the reconstruction problem.
+Traditional, hand-crafted priors, such as the \gls{tv} prior~\cite{rudin_nonlinear_1992} and extensions such as the \gls{tgv}~\cite{bredies_total_2010}, typically encode local gradient information of the reconstruction.
+While these hand-crafted priors have been used extensively and successfully in image restoration~\cite{chan_constrained_2013,getreuer_rudin_2012,rudin_nonlinear_1992} and reconstruction tasks~\cite{chen_limited_2013,liu_total_2014,zhang_few-view_2013}, they lack expressiveness compared to state-of-the-art learning-based approaches~\cite{kobler_total_2020}.
+In a similar vein, traditional learning-based approaches model local image information and therefore are not suited to fully remove the global streaking and smearing artifacts that arise can arise low-dose and limited-angle \gls{ct}~\cite{barrett_artifacts_2004}.
+A popular approach to combat this issue has emerged recently and is based upon learning the stages of an iteratively unrolled gradient descent individually~\cite{hammernik_deep_2017,hammernik_learning_2017}.
+However, although this approach does consider physical principles, it lacks interpretability due to its feed-forward nature.
+In contrast, we propose a novel learned prior utilizing a global receptive field to remove large-scale coherent artifacts, while staying consistent with the acquired data.
+\section{Contributions and Outline}
+In this thesis, we introduce a novel regularization scheme, where a regularizer with a global receptive field is trained generatively on \gls{ct} images.
+Our formulation allows to cast the regularizer in a probabilistic framework, which drastically improves interpretability compared to other deep learning-based approaches.
+As an example, we can visualize the prior distribution of our regularizer by showing its modes or drawing samples from it.
+Further, for any given reconstruction problem, in addition to computing the \gls{map} point estimate, the posterior distribution can be sampled.
+Therefore, the expected value as well as the variance over the posterior can be visualized, which is valuable as it relates to uncertainty quantification.
+
+We apply a trained model to a multitude of reconstruction tasks, and compare our approach quantitatively and qualitatively with more traditional reconstruction algorithms.
+In addition, we perform experiments which leverage the possibility of probabilistic interpretation of our approach, such as prior and posterior sampling.
+Finally, we challenge our proposed novel approach by applying our regularizer to reconstruction tasks of different resolutions and out-of-distribution data.
+To summarize, we enumerate the contributions in this thesis as follows:
+\begin{itemize}
+	\item The design of an architecture that is suitable for usage as a generative prior.
+	\item Data-independent analysis of the learned regularizer by means of exploring modes and drawing samples, for visualizing and understanding the learned regularizer.
+	\item Application of the learned regularizer to limited-angle and few-view \gls{ct} reconstruction, achieving satisfactory results.
+		In addition, we analyze the posterior distribution of a few-view reconstruction problem.
+	\item Pointing out the limitations of our approach by challenging the learned regularizer on out-of-distribution data.
+\end{itemize}
+
+This thesis is organized as follows:
+In~\cref{chap:principles}, we will introduce the general principle of tomography and review the physical principles in medical \gls{ct}. 
+Along the way, we will develop the signal model for \gls{ct} that is used throughout this thesis.
+We end this chapter with a brief overview of medical \gls{ct} instrumentation.
+In~\cref{chap:image-formation}, we develop a mathematical formulation for the forward problem and discuss approaches for solving the inverse problem.
+We also review the typical artifacts that arise during reconstruction.
+In~\cref{chap:reconstruction}, we discuss different possibilities for increasing the visual quality of \gls{ct} reconstructions.
+This ranges from pre- and post-processing techniques over domain transform learning to variational reconstruction, which is the approach we follow.
+We discuss the specifics of our proposed model and training procedure and show the corresponding numerical experiments in~\cref{chap:experiments}.
+Finally, the thesis is concluded in~\cref{chap:conclusion}.
+\end{document}

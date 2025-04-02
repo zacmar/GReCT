@@ -1,0 +1,33 @@
+\def\prologprefix{prolog}
+
+\pagenumbering{roman}
+\input{\prologprefix/titlepage}
+\ifthenelse{\boolean{bDedication}\or\boolean{bAll}}{
+	\input{\prologprefix/dedication}
+}{}
+
+\ifthenelse{\boolean{bAbstract}\or\boolean{bAll}} {
+	\input{\prologprefix/abstract}
+}{}
+
+\ifthenelse{\boolean{bDeclaration}\or\boolean{bAll}} {
+	\input{\prologprefix/statutory_declaration}
+}{}
+
+\ifthenelse{\boolean{bAcknowledgments}\or\boolean{bAll}} {
+	\input{\prologprefix/acknowledgment}
+}{}
+
+\ifthenelse{\boolean{bContentsAndLists}\or\boolean{bAll}} {
+	\newpage
+	\begin{spacing}{1.1}
+		\tableofcontents
+		\listoffigures
+		\listoftables
+		\ifthenelse{\boolean{bDraft}\or\boolean{bAll}} {
+			\listoftodos%
+			% \addcontentsline{toc}{chapter}{TODOS}
+			% \addstarredchapter{Todos}
+		}{}
+	\end{spacing}
+}{}

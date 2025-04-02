@@ -1,0 +1,27 @@
+\documentclass[tikz]{standalone}
+\input{geometries.style}
+
+\begin{document}
+	\begin{tikzpicture}
+		\pic [yscale=2, local bounding box=source]  at (-3, 0) {source};
+		\node [below] at (source.south) {Source};
+		\pic [scale=0.5, local bounding box=detector] at (3, 0) {detector};
+		\node [below=0.2cm] at (detector.south) {Detector};
+		\pic [local bounding box=slab] at (0, 0) {slab};
+		\draw [ultra thick, -latex] (-3, 0) -- (slab.west);
+		\draw [ultra thick, -latex] (-3, 0.7) -- (slab.west |- 3, 0.7);
+		\draw [ultra thick, -latex] (-3, -0.7) -- (slab.west |- 3, -0.7);
+		\draw (-3, -0.35) -- ++(0.5, 0.);
+		\draw (-3, +0.35) -- ++(0.5, 0.);
+		\draw [thick, -latex] (-3, 0.7 -| slab.east) -- (-3, 0.7 -| detector.west);
+		\draw [thick, -latex] (-3, -0.7 -| slab.east) -- (-3, -0.7 -| detector.west);
+		\draw [thick, -latex] (slab.east) -- (detector.west);
+		\node [below] at (slab.south) {\( \Delta x \)};
+		\draw [<-] (slab.south west) -- ++(-0.2, 0);
+		\draw [<-] (slab.south east) -- ++(0.2, 0);
+		\draw [dashed, -latex] (0.1, 0.) -- ++(2, 2);
+		\draw [dashed, -latex] (-0.1, 0.) -- ++(2, -1);
+		\draw [dashed, -latex] (0.1, 0.7) -- (detector.west);
+		\draw [dashed, -latex] (0.1, -0.7) -- (detector.west);
+	\end{tikzpicture}
+\end{document}

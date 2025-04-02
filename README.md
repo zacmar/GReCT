@@ -1,2 +1,3 @@
+![GReCT](./grect.png)
 # GReCT
-Master's thesis about generative models for CT reconstruction
+Masters thesis on Generative Regularizers in Computed Tomography

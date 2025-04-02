@@ -1,0 +1,65 @@
+%! TeX program = xelatex
+\documentclass[11pt, a4paper, svgnames]{book}
+
+\newcommand{\iicg}{Institute of Computer Graphics and Vision}
+\newcommand{\authorname}{Martin Zach}
+\newcommand{\titlename}{Generative Regularizers in Computed Tomography}
+\newcommand{\mastersProgramme}{Biomedical Engineering}
+\newcommand{\supervisorI}{Prof.\ Dr.\ Thomas Pock}
+\newcommand{\addressI}{\iicg}
+\newcommand{\supervisorII}{Dr.\ Erich Kobler}
+\newcommand{\addressII}{\iicg}
+\newcommand{\phddate}{Graz, Austria, June 2021}
+
+\input{setup}
+\input{style}
+\input{./def/draft.tex}
+\input{./def/formating.tex}
+\input{./def/math.tex}
+\input{./def/acronyms_abbrevs.tex}
+
+\pagestyle{fancy}
+\pagenumbering{roman}
+\setcounter{page}{1}
+
+\usepackage{subfiles}
+\begin{document}
+\thispagestyle{fancy}
+\dominitoc%
+
+\include{prolog/prolog}
+
+\cleardoublepage%
+\pagenumbering{arabic}
+\setcounter{page}{1}
+
+\glsresetall%
+\subfile{body/introduction}
+
+\glsresetall%
+\subfile{body/principles}
+
+\glsresetall%
+\subfile{body/image-formation}
+
+\glsresetall%
+\subfile{body/model-based-reconstruction}
+
+\glsresetall%
+\subfile{body/experiments}
+
+\subfile{body/conclusion}
+
+\ifthenelse{\boolean{bAppendix}}{
+	\begin{appendix}
+		\setcounter{chapter}{0}
+		\include{app.abbrevs_symbols}
+	\end{appendix}
+}{}
+\cleardoublepage%
+% Creates an 'anchor' such that links (e.g. TOC) point to the proper place
+% and not to some empty space before
+\phantomsection%
+\addcontentsline{toc}{chapter}{Bibliography}
+\printbibliography%
+\end{document}

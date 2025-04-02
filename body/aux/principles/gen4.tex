@@ -1,0 +1,33 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{decorations.pathreplacing,decorations.pathmorphing,calc}
+\input{geometries.style}
+\def\centerarc[#1](#2)(#3:#4:#5)%
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+\definecolor{photoncolor}{rgb}{0.65, 0.16, 0.16}
+\begin{document}
+\begin{tikzpicture}
+	\pic[scale=0.8] at (0,-1) {human};
+	\def\opa{0.4}
+	\foreach \angle in {0,3.2,...,360}
+	{
+		\pic[transform shape, local bounding box=detector, rotate=\angle,scale=0.1] at (\angle:4) {detector};
+	}
+	\pic[transform shape, local bounding box=source, rotate=-90, scale=0.2] at (0, 3.5) {source};
+	\centerarc[-latex, thick, dashed](0,0)(95:145:3.5);
+	\foreach [count=\i] \minoroff in {-2,-1.8,...,2}
+	{
+		\ifodd\i\draw [
+			-latex, decorate, decoration={snake, amplitude=0.05cm, segment length=5pt, post length=1mm},%
+			color=photoncolor, opacity=0.5
+		] (source.south) -- (-90+20*\minoroff:3.9);\fi
+	}
+	\pic[opacity=0.5, transform shape, local bounding box=source, rotate=180+60+90, scale=0.2] at (150:3.5) {source};
+	\foreach [count=\i] \minoroff in {-2,-1.8,...,2}
+	{
+		\ifodd\i\draw [
+			-latex, decorate, decoration={snake, amplitude=0.05cm, segment length=5pt, post length=1mm},%
+			color=photoncolor, opacity=0.2
+		] ($(source.south) + (0.1, 0.1)$) -- (-30+20*\minoroff:3.9);\fi
+	}
+\end{tikzpicture}
+\end{document}

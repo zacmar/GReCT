@@ -1,0 +1,83 @@
+\usepackage{tikz}
+\usepackage{xcolor}
+\usetikzlibrary{arrows,decorations.pathmorphing,shapes,calc}
+
+\definecolor{photoncolor}{rgb}{0.65, 0.16, 0.16}
+\definecolor{electroncolor}{rgb}{0.65, 0.65, 0.65}
+%\proton{xposition,yposition}
+\newcommand{\proton}[1]{%
+	\shade [ball color=black!60] (#1) circle (.25);
+	\draw (#1) node{$+$};
+}
+
+%\neutron{xposition,yposition}
+\newcommand{\neutron}[1]{%
+	\shade[ball color=black!20] (#1) circle (.25);
+}
+
+%\electron{xwidth,ywidth,rotation angle}
+\newcommand{\electron}[3]{%
+	\draw [rotate = #3] (0, 0) ellipse (#1 and #2) [color=gray];
+	\shade [ball color=electroncolor] (0, #2) [rotate=#3] circle (.1);
+}
+
+\newcommand{\nucleus}{%
+	\neutron{0.1,0.3}
+	\proton{0,0}
+	\neutron{0.3,0.2}
+	\proton{-0.2,0.1}
+	\neutron{-0.1,0.3}
+	\proton{0.2,-0.15}
+	\neutron{-0.05,-0.12}
+	\proton{0.17,0.21}
+}
+
+%\photoelectron{xwidth,ywidth,rotation angle}
+\newcommand{\photoelectron}[3]{%
+	\draw [rotate=#3] (0, 0) ellipse (#1 and #2) [dashed, color=gray];%
+	\draw [
+		-latex, decorate, decoration={snake, amplitude=0.3cm, segment length=20pt, post length=1mm},%
+		color=photoncolor
+	] ($(#3:#1) + (-6,0)$) -- ++(6-0.1, 0);%
+	\draw [-stealth] (#3:#1) -- ++(5, 0.625);
+	\shade [ball color=electroncolor] (#3:#1) -- ++(4, 0.5) node [text width=1.8cm, above=0.2cm] {\large \( e^- \) from an inner shell} circle(0.1);
+	\draw (#1,0) [rotate=#3, color=electroncolor, fill=white] circle (.1);
+	\draw [
+		-latex, decorate, decoration={snake, amplitude=0.3cm, segment length=50pt, post length=1mm},%
+		color=photoncolor
+	] (1, -1) -- ++(6, -2);%
+	\node [rotate=-24, text width=3cm] at (6, -1.7) {\large Characteristic Radiation};
+}
+
+%\comptonelectron{xwidth,ywidth,rotation angle}
+\newcommand{\comptonelectron}[3]{%
+	\draw [rotate=#3] (0,0) ellipse (#1 and #2) [dashed, color=gray];
+	\draw [
+		-latex, decorate, decoration={snake, amplitude=0.3cm, segment length=0.5cm, post length=1mm},
+		color=photoncolor
+	] ($(#3:#1) + (-6, 0)$) -- ++(6 - 0.1, 0);
+	\draw [gray, dashdotted] ($(#3:#1) + (-6, 0)$) -- ++(10, 0);
+	\draw [gray, dashdotted] (#3:#1) ++(0:3) arc (0:-26:3) node [black, midway, left] {\large \( \theta \)};
+	\draw [-stealth] (#3:#1) -- ++(5, 2.5);
+	\shade [ball color=electroncolor] (#3:#1)  --  ++(4,2.0) node[text width=2cm, below right=0.05cm]{\large \( e^- \) from an outer shell} circle(0.1);
+	\draw (#1,0) [rotate=#3, color=electroncolor, fill=white] circle (.1) ;
+	\draw [
+		decorate, decoration={snake, amplitude=0.3cm, post length=1mm, segment length=0.7cm},
+		color=photoncolor,-stealth
+	] ($(#3:#1) + (0.1, 0)$) -- ++(6, -3);
+	\node [rotate=-26] at (5.5, 1.5) {\large Compton photon};%
+	\draw [gray, dashdotted] ($(#3:#1) + (0.1, 0)$) -- ++(3.5, -1.75);
+}
+
+%\paircreation{impact parameter}
+\newcommand{\paircreation}[1]{%
+	\draw[
+		-latex, decorate,
+		decoration={snake, amplitude=0.3cm, segment length=0.3cm, post length=2mm},
+		color=photoncolor
+	] (-6, #1) -- ++(6, 0);
+	\draw [-stealth] (0, #1) -- ++ (5, 2.5);
+	\draw [dashed, fill=white] (4, #1 + 2.0) node[below right=0.1cm] {\large \( e^+ \)} circle (0.1);
+	\draw [-stealth] (0, #1) -- ++ (4, -2.0);
+	\shade [ball color=gray] (0, #1) -- ++(3.2, -1.6) node[above right=0.1cm] {\large \( e^- \)} circle(0.1);
+}

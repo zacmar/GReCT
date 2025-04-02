@@ -1,0 +1,69 @@
+\documentclass[../PhD_main.tex]{subfiles}
+\begin{document}
+
+
+\newcommand{\textcommand}[2]{\textbackslash{#1}\textbraceleft #2\textbraceright}
+
+
+\chapter{HowTo}
+\label{chap:howto}
+
+
+\begin{quote}
+	You can start your chapter with a reference to a publication, \eg:
+	
+	This chapter is based on my awesome publication presented at CVPR.
+	
+	\fullcite{MyAwesomePublication2019}
+\end{quote}
+
+\minitoc
+
+\section{Style}
+\label{sec:howto:intro_contributions}
+The main usepackages are defined in the file \texttt{style.tex}. Here, also settings to produce the pdf file are set. You have to change title and author there to display the correct information in the pdf.
+
+\section{Todos and comments}
+You can add todos using the \texttt{todo} command \todo{add some todo} or add some comments using \texttt{mycomment}. Both commands produce an entry in the todo list.
+
+\section{Referencing}
+\label{sec:howto:referencing}
+This thesis now uses the \texttt{cleveref} package. There is no need to write \texttt{Eq.\textasciitilde\textcommand{ref}{eq:howto:myeq}} or \texttt{Fig.\textasciitilde \textcommand{ref}{fig:howto:myfig}} anymore.
+Just use the \texttt{\textbackslash{cref}} command and it is displayed automatically!
+Just make sure to correctly and uniquely label your figures, tables, equations, sections, chapters,...
+More information on the cleveref package can be found in the \href{http://tug.ctan.org/tex-archive/macros/latex/contrib/cleveref/cleveref.pdf}{package documentation}.
+\\
+
+\noindent Examples using \texttt{\textbackslash{cref}}:
+\begin{itemize}
+	\item \texttt{\textcommand{cref}{fig:howto:myfig}} displays \cref{fig:howto:myfig}
+	\item To reference at the start of a sentence use \texttt{\textcommand{Cref}{fig:howto:myfig}} that displays \Cref{fig:howto:myfig}
+	\item \texttt{\textcommand{cref}{eq:howto:myeq}} displays \cref{eq:howto:myeq}
+	\item \texttt{\textcommand{cref}{sec:howto:referencing}} displays \cref{sec:howto:referencing}
+\end{itemize}
+
+\begin{equation}\label{eq:howto:myeq}
+a^2 + b^2 = c^2
+\end{equation}
+
+\begin{figure}
+\centering
+\includegraphics[width=2cm]{empty_image}
+\caption{myfig}\label{fig:howto:myfig}
+\end{figure}
+
+\section{Glossary}
+\label{sec:howto:glossary}
+This template uses the \texttt{glossaries} package. New abbreviations can be added to the file \texttt{./def/def\_acronyms\_abbrevs.tex}. The abbreviations are fully defined at first use, afterwards only the abbreviations are shown.
+
+\begin{itemize}
+	\item \texttt{\textcommand{gls}{ai}} displays \gls{ai}
+	\item Now, \texttt{\textcommand{gls}{ai}} displays \gls{ai}
+	\item The plural form can be displayed with \texttt{\textcommand{glspl}{cnn}} displays \glspl{cnn}
+\end{itemize}
+
+\section{Bibliography}
+You can use different bibliography styles, \eg \texttt{apalike}, or a modified \texttt{plain} defined in \texttt{phdplain}, which includes URLs in the bibliography.
+To display single bibentries, you can use the \texttt{bibentry} command, \eg \texttt{\textcommand{bibentry}{MyAwesomePublication2019}} displays\\
+\fullcite{MyAwesomePublication2019}
+\end{document}

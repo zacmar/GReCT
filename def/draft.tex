@@ -1,0 +1,56 @@
+\newboolean{SWITCH_NEW_TEXT}
+\setboolean{SWITCH_NEW_TEXT}{true}
+\newcommand{\newText}[1]{
+	\ifthenelse{\boolean{SWITCH_NEW_TEXT}}{$\triangleright$  [new text] {#1$\triangleleft$}}{#1}
+}
+
+\newboolean{SWITCH_REVIEW_TEXT}
+\setboolean{SWITCH_REVIEW_TEXT}{true} % Highlights text that is marked as new text (command \newText) if option is true
+\newcommand{\revText}[3]{
+	\ifthenelse{\boolean{#1}}{$\triangleright [review #3] ${#2$\triangleleft$}}{#2}
+}
+
+\newboolean{SWITCH_HIDE_TEXT}
+\setboolean{SWITCH_HIDE_TEXT}{true}
+\newcommand{\hideText}[2]{
+	\ifthenelse{\not\boolean{#1}}{#2}
+}
+
+\newboolean{SWITCH_REMARKS_TEXT}
+\setboolean{SWITCH_REMARKS_TEXT}{true}
+\newcommand{\remarkText}[1]{
+	\ifthenelse{\boolean{SWITCH_REMARKS_TEXT}}{\marginpar{#1}}
+}
+
+\newboolean{SWITCH_DUBIOUS_TEXT}
+\setboolean{SWITCH_DUBIOUS_TEXT}{true}
+\newcommand{\unsureText}[2]{
+	\ifthenelse{\boolean{#1}}
+	{
+		\vspace{.3cm}
+		\begin{tabular}{l}
+			\hline
+			\begin{minipage}{.9\columnwidth}\textit{uncertain text\\} {#2} \end{minipage}\\
+			\hline
+   		\end{tabular}\vspace{.3cm}
+	}{
+		#2
+	}
+}
+
+\newboolean{SWITCH_LACKED_TEXT}
+\setboolean{SWITCH_LACKED_TEXT}{false}
+\newcommand{\lackedText}[2]{
+	\ifthenelse{\boolean{#1}}
+	{
+		\vspace{.3cm}
+		\begin{tabular}{l}
+			\hline
+			\begin{minipage}{.9\columnwidth}\textit{lacked text\\} {#2} \end{minipage} \\
+			\hline
+		\end{tabular}
+		\vspace{.3cm}
+	}{
+		#2
+	}
+}

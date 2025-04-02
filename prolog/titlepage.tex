@@ -1,0 +1,107 @@
+% !TEX root = PhD_main.tex
+\pagenumbering{roman}
+
+\newgeometry{top=2cm,bottom=2cm}
+
+% =================================================================================================
+
+% Title Page
+
+% =================================================================================================
+
+%\thispagestyle{empty}
+
+\ifthenelse{\boolean{bDraft}}{}
+{
+ \newcommand{\drafttext}{}
+}
+
+  \ifthenelse{\boolean{bFemale}}{
+    \newcommand{\gender}{in}
+  }
+  {
+    \newcommand{\gender}{}
+  }
+
+\ifthenelse{\boolean{bDoctoralThesis}}{
+  \newcommand{\thesistext}{DOCTORAL THESIS}
+  \newcommand{\titletext}[1]{Doktor#1 der technischen Wissenschaften}
+  }
+  {
+  \newcommand{\thesistext}{MASTER'S THESIS}
+  \newcommand{\titletext}[1]{Diplom-Ingenieur#1}
+  }
+  
+
+
+\newcommand{\offsetII}{\vspace*{0.1cm}}
+\newcommand{\offsetIII}{\vspace*{0.5cm}}
+
+\begin{titlepage} % the title page
+
+\centering
+\large
+
+\resizebox*{4cm}{!}{\includegraphics{tug_logo}} %\hspace{1.3cm}
+%\resizebox*{1cm}{!}{\includegraphics{icg_logo}} \vspace{0.2cm}
+
+\vspace*{2cm}
+
+\LARGE{\authorname}
+
+\vspace*{1.2cm} 
+
+{
+\emph{\huge \drafttext}
+\textbf{\huge \titlename}
+}
+
+\vspace{1.7cm}
+
+\Large{\textbf{\thesistext}}\\\vspace*{0.3cm}
+\large
+to achieve the university degree of\\\offsetII
+\titletext{\gender}\\
+
+\ifthenelse{\boolean{bDoctoralThesis}}{}
+{
+\vspace*{1cm}
+Master's degree programme\\ \offsetII
+\mastersProgramme\\
+}
+
+
+\vspace*{1.5cm}
+
+submitted to\\\vspace*{0.1cm}
+
+\Large{\textbf{Graz University of Technology}}\\
+
+\ifthenelse{\boolean{bDoctoralThesis}}{
+\vspace*{4cm}
+}{
+\vspace*{2cm}
+}
+
+\large
+{Supervisor}\\
+\offsetIII
+\supervisorI\\
+\offsetII
+\addressI\\
+\offsetIII
+\supervisorII\\
+\offsetII
+\addressII
+
+\vfill
+
+\normalsize \phddate\\
+\end{titlepage}
+
+\restoregeometry
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

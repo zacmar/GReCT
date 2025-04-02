@@ -1,0 +1,74 @@
+\documentclass[tikz]{standalone}
+\usetikzlibrary{calc, positioning, shapes, backgrounds, fit, arrows}
+\usepackage{pgf-spectra}
+\usepackage{siunitx}
+
+\begin{document}
+
+\pgfdeclarehorizontalshading{visiblelight}{50bp}{
+    color(0bp)=(violet!25);
+    color(8.33bp)=(blue!25);
+    color(16.67bp)=(cyan!25);
+    color(25bp)=(green!25);
+    color(33.33bp)=(yellow!25);
+    color(41.5bp)=(orange!25);
+    color(50bp)=(red!25)
+}%
+
+\begin{tikzpicture}[%
+	raylabel/.style={font=\scriptsize}
+]
+	\def\minexponent{-6}
+	\def\maxexponent{6}
+	\def\spectrumheight{9em}
+	\def\tickheight{1em}
+	\def\spectrumlength{16cm}
+	\def\startvisible{8.3cm}
+	\def\endvisible{8.8cm}
+	\def\energies{e-6, e-4, e-2, e0, e2, e4, e6}
+	\def\wavelengths{1,e-2,e-4,e-6,e-8,e-10,e-12}
+	\fill [gray!50] (0 + 1em, 0) rectangle (\spectrumlength - 1em, \spectrumheight);
+        \node[
+            inner sep=0pt,
+            outer sep=0pt,
+	    shading=visiblelight,
+            fit={(\startvisible,0)(\endvisible,\spectrumheight)},
+	    shading angle=180,
+	] (\startvisible, 0) {};
+	\draw [-latex] (0, 0) -- ++(\spectrumlength, 0) node [below] {\( E\ \text{in}\ \si{\electronvolt}\)};
+	\draw [-latex] (\spectrumlength, \spectrumheight) -- ++(-\spectrumlength, 0) node [above] {\( \lambda\ \text{in}\ \si{\meter}\)};
+	\foreach [count=\i] \energy in \energies
+	{
+		\draw (\i * 2cm, \tickheight / 2) -- ++(0, -\tickheight) node [below] {\( \num[scientific-notation=true]{\energy} \)};
+	}
+	\foreach [count=\i] \wavelength in \wavelengths
+	{
+		\draw (\i * 2cm, \spectrumheight - \tickheight / 2) -- ++(0, \tickheight) node [above] {\( \num[scientific-notation=true]{\wavelength} \)};
+	}
+	\foreach \x in {2cm, 5, 10.5cm}
+	{
+		\draw [dashed] (\x, 0) -- ++(0, \spectrumheight);
+	}
+	\draw [dashed] (12.5, 0) -- ++(1, \spectrumheight);
+
+	\foreach \x/\labl in {1.2cm/(Long) Radio, 3.5cm/Microwaves, 6.8cm/Infrared, 9.6cm/Ultraviolet, 11.8cm/X-Rays, 14.3/Gamma Rays}
+	{
+		\node [rotate=55] at (\x, \spectrumheight / 2) {\labl};
+	}
+	\node [rectangle, minimum width=6cm, shade, shading angle=270] at (12.7cm, -1cm) {ionizing};
+	\node[
+		inner sep=0.0em,
+		minimum height=1.2cm,
+		minimum width=5.4cm,
+		rotate=180,
+		draw,
+		fill=black!20,
+		align=center,
+		label=below:{Visible Light}
+        ] (visible) at (\startvisible/2 + \endvisible/2, -2.5) {%
+		\pgfspectra[width=5cm, height=1cm]%
+	};
+	\draw [gray] (visible.south west) -- (\endvisible, 0);
+	\draw [gray](visible.south east) -- (\startvisible, 0);
+\end{tikzpicture}
+\end{document}

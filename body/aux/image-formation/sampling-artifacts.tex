@@ -1,0 +1,16 @@
+\documentclass[tikz]{standalone}
+
+\begin{document}
+\begin{tikzpicture}
+	\def\size{3cm}
+	\foreach [count=\idd] \dd in {1, 2, 3}
+	{
+		\node [rotate=90] at (1.2, -3 * \idd) {\( \Delta_r = \dd\ \mathrm{px} \)};
+		\foreach [count=\int] \nt in {180, 120, 60, 30}
+		{
+			\ifnum\idd=1\node at (3 * \int, -1.2) {\( N_\theta = \nt \)}; \fi
+				\node at (\size * \int, -\size * \idd) {\includegraphics[width=2.8cm]{./figures/image-formation/sampling/fbp_detectordiff_\dd_ntheta_\nt.png }};
+		}
+	}
+\end{tikzpicture}
+\end{document}

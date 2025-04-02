@@ -1,0 +1,22 @@
+\documentclass[tikz]{standalone}
+\input{interaction_style}
+\begin{document}
+\begin{tikzpicture}
+	\nucleus
+	\electron{1.2}{1.4}{260}
+	\electron{4}{2}{30}
+	\electron{5}{1}{60}
+	\electron{5.5}{1.5}{150}
+	\electron{4.8}{2.25}{80}
+	\photoelectron{1.5}{0.75}{80}
+	\begin{scope}[opacity=0]
+		\nucleus
+		\electron{1.5}{0.75}{80}
+		\electron{1.2}{1.4}{260}
+		\electron{4}{2}{30}
+		\electron{5}{1}{60}
+		\electron{5.5}{1.5}{150}
+		\comptonelectron{4.8}{2.25}{80}
+	\end{scope}
+\end{tikzpicture}
+\end{document}
